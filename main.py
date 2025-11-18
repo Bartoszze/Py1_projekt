@@ -6,7 +6,6 @@ import os
 import base64
 
 def alg(img1, img2): #img1 - cutout, img2 - ref
-    print(img1)
     try:
         cutoutColor = cv2.imread(f'./uploads/{img1}')
         refColor = cv2.imread(f'./uploads/{img2}')
@@ -61,7 +60,6 @@ def alg(img1, img2): #img1 - cutout, img2 - ref
         M, mask = cv2.findHomography(srcPts, dstPts, cv2.RANSAC, 5.0)
 
         if M is None:
-            print("Failed to find homography.")
             return {"err": "Failed to find homography"}
             exit()
 
