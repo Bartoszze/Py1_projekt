@@ -12,14 +12,12 @@ def alg(img1, img2): #img1 - cutout, img2 - ref
 
         if refColor is None or cutoutColor is None:
             return {"err": "Failed to load images"}
-            exit()
 
         refGray = cv2.cvtColor(refColor, cv2.COLOR_BGR2GRAY)
         cutoutGray = cv2.cvtColor(cutoutColor, cv2.COLOR_BGR2GRAY)
 
     except cv2.error as err:
         return {"err": "Image processing error"}
-        exit()
 
     # SIFT
     sift = cv2.SIFT_create()
@@ -29,7 +27,6 @@ def alg(img1, img2): #img1 - cutout, img2 - ref
 
     if desRef is None or desCutout is None or len(keyPointsRef) == 0 or len(keyPointsCutout) == 0:
         return {"err": "No key points detected in images"}
-        exit()
 
     # Matching feature
     matcher = cv2.BFMatcher(cv2.NORM_L2)
@@ -61,7 +58,6 @@ def alg(img1, img2): #img1 - cutout, img2 - ref
 
         if M is None:
             return {"err": "Failed to find homography"}
-            exit()
 
         # Maska inliers
         matchesMask = mask.ravel().tolist()
