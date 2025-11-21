@@ -16,6 +16,12 @@ def alg(img1, img2): #img1 - cutout, img2 - ref
         refGray = cv2.cvtColor(refColor, cv2.COLOR_BGR2GRAY)
         cutoutGray = cv2.cvtColor(cutoutColor, cv2.COLOR_BGR2GRAY)
 
+        # CLAHE
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        refGray = clahe.apply(refGray)
+        cutoutGray = clahe.apply(cutoutGray)
+
+        
     except cv2.error as err:
         return {"err": "Image processing error"}
 
