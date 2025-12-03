@@ -8,7 +8,7 @@ from google import genai
 from google.genai import types
 
 UPLOAD_FOLDER = 'uploads'
-GOOGLE_API_KEY = "AIzaSyBVV1mBYTKHxTUBnXM0GBsPnSfz1sNWZek" 
+GOOGLE_API_KEY = "YOUR_GOOGLE_API_KEY_HERE"  
 
 def googleApi(image_bytes):
     try:
