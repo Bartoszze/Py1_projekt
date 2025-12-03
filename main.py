@@ -17,7 +17,7 @@ def googleApi(image_bytes):
 
         client = genai.Client(api_key=GOOGLE_API_KEY)
 
-        # Define the geolocation analysis prompt
+        # prompt
         geoPrompt = """
         Jesteś ekspertem od geolokalizacji i analizy obrazu (OSINT). 
         Twoim zadaniem jest przeanalizowanie zdjęcia i określenie jego lokalizacji.
