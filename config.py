@@ -1,7 +1,7 @@
 import os
 class Config:
     UPLOAD_FOLDER = 'uploads'
-    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
     @staticmethod
     def init_app(app):

@@ -1,11 +1,12 @@
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+from dotenv import load_dotenv 
 from config import Config
 from services.cv_service import ImageMatcher
 from services.ai_service import GeoAnalyzer
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
 Config.init_app(app)
