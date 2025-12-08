@@ -34,7 +34,7 @@ def handle_upload():
         if "err" in cv_result:
             return jsonify(cv_result) 
 
-        ai_result_text = geo_analyzer.analyze_image(path2)
+        ai_result_text = geo_analyzer.analyze_image(path1)
 
         final_response = {
             "status": "success",
