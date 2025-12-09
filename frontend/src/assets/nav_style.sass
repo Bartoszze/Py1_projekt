@@ -1,0 +1,13 @@
+@use './variables' as variables
+@use './colors' as color
+
+.nav
+    height: variables.$heightBox
+    background-color: color.$colorWhite
+    p
+        font-size: variables.$fontSizeText
+    img
+        padding-right: variables.$padding
+    &__width
+        display: flex
+        @include variables.width()

@@ -1,0 +1,141 @@
+@use './variables' as variables
+@use './colors' as color
+$colorGreyBg: rgba(color.$colorGrey, 4%)
+.home
+    min-height: variables.$heightMain
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    text-align: center
+    padding: 15px
+    // margin: 25px 0
+    @media screen and (max-width: 991.98px)
+        margin: 20px 0
+    &__container
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+    &__results
+        // margin: 20px 0
+        width: 100%
+        &--gemini
+            font-weight: bold
+            text-align: left
+
+            // color: color.$colorWhite
+            background-color: $colorGreyBg
+            border-radius: 12px
+            width: 1020px
+            padding: variables.$padding
+            max-width: 90%
+            margin: auto
+        p
+            span
+                font-weight: bold
+                color: color.$colorBlueActive
+    &__text
+        padding: variables.$padding
+        h2
+            font-size: 42px
+    &__upload
+        position: relative
+        overflow: hidden
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px
+        margin: 25px
+        border-radius: 12px
+        background-color: color.$colorWhite
+        border: 1px solid rgba(color.$colorGrey, 10%)
+        // padding: 22px
+        width: 450px
+        // max-width: 90%
+        padding: 0 0 variables.$margin 0
+        transition: 0.1s linear
+        @media screen and (max-width: 991.98px)
+            width: 90%
+        &::after
+            transition: 0.2s linear
+            border-radius: 100%
+            content: ''
+            position: absolute
+            top: 50%
+            left: 50%
+            height: 0px
+            width: 0px
+            background-color: $colorGreyBg
+            z-index: -1
+            transform: translate(-50%,-50%)
+        &:hover
+            $colroBlue: rgba(21, 94, 252, 0.24)
+            box-shadow: $colroBlue 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px
+            border: 1px solid $colroBlue
+            background-color: $colorGreyBg
+            cursor: pointer
+            &::after
+                height: 150%
+                width: 150%
+        &--text
+            padding: variables.$margin
+            text-align: left
+            background-color: $colorGreyBg
+        &--dragDragBox
+            border-radius: 12px
+            min-height: 300px
+            display: flex
+            justify-content: center
+            align-items: center
+            flex-direction: column
+            background-color: $colorGreyBg
+
+            // border: dashed 2px color.$colorGrey
+            padding: variables.$margin
+            margin: variables.$margin variables.$margin 0 variables.$margin
+            img
+                animation: shahe 0.5s ease-in-out normal
+                margin: variables.$margin
+            h5
+                padding: 15px
+                color: rgba(color.$colorGrey, 40%)
+
+.active
+    border: 1px solid color.$colorGreenActive
+    animation: slide-in-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both
+    &:hover
+        background-color: #C8E6C9
+
+    @keyframes shahe
+        0%
+            opacity: 0.4
+            transform: scale(40%)
+
+        100%
+            opacity: 1
+            transform: scale(100%)
+
+.animation
+    animation: slide-in-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both
+    h2
+        font-size: 42px
+    p
+        margin-bottom: 35px
+    img
+        width: 80%
+        border-radius: 12px
+        // box-shadow: rgba(27, 27, 168, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px
+        margin-bottom: variables.$margin
+    // h3
+        // font-size: 42px
+        // margin: variables.$margin
+
+    @keyframes slide-in-up
+        0%
+            transform: translateY(14px)
+            opacity: 0
+        60%
+            // opacity: 0.4
+        100%
+            transform: translateY(0)
+            opacity: 1
+// error
+.error
+    margin: variables.$margin
