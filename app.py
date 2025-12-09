@@ -41,7 +41,8 @@ def handle_upload():
             file2.save(path2)
             cv_result = matcher.process(path1, path2)
             if "err" in cv_result:
-                return jsonify({"Error": "Błąd podczas przetwarzania obrazu"}), 400
+                # print(f"BŁĄD PRZY PRZETWARZANIU OBRAZU: {cv_result['err']}")
+                return jsonify({"Error": f"Błąd podczas przetwarzania obrazu {cv_result['err']}"}), 400
             
             current_matches = cv_result.get("matches", 0)
             if current_matches > max_matches:
@@ -62,7 +63,7 @@ def handle_upload():
         return jsonify(final_response)
 
     except Exception as e:
-        print(f"BŁĄD SERWERA: {str(e)}")
+        print(f"Błąd serwera: {str(e)}")
         return jsonify({"Error": str(e)}), 500
         
     finally:
