@@ -1,0 +1,23 @@
+@use './variables' as variables
+@use './colors' as color
+
+a
+    z-index: 9999
+    button
+        position: relative
+        border: 0
+        cursor: pointer
+        border-radius: 12px
+        padding: 10px 15px
+        font-weight: 600
+        color: color.$colorWhite
+        // box-shadow: inset 0px -5px 5px 0px rgba(39, 39, 39, 0.45)
+        // background-color: color.$colorBlueActive
+        // transition: 0.2s ease-out
+        // border: 2px solid #ffffff00
+        transition: 0.1s linear
+        border: 4px solid #ffffff00
+
+        &:hover
+            border: 4px solid #ffffff4d
+            opacity: 70%
