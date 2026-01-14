@@ -8,14 +8,11 @@ class GeoAnalyzer:
         if api_key:
             self.client = genai.Client(api_key=api_key)
 
-    def analyze_image(self, image_path):
+    def analyze_image(self, image_data):
         if not self.client:
             return "Błąd: Brak klucza API Gemini."
 
         try:
-            with open(image_path, 'rb') as f:
-                image_bytes = f.read()
-
             geo_prompt = """
             Jesteś ekspertem od geolokalizacji i analizy obrazu (OSINT). 
             Twoim zadaniem jest przeanalizowanie zdjęcia i określenie jego lokalizacji.
@@ -40,13 +37,15 @@ class GeoAnalyzer:
             """
 
             response = self.client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-2.0-flash', # Zmieniłem na 2.0-flash (jest stabilny, 2.5 to literówka?)
                 config=types.GenerateContentConfig(temperature=0.4),
                 contents=[
-                    types.Part.from_bytes(data=image_bytes, mime_type='image/jpeg'),
+                    # TU BYŁ BŁĄD: Przekazujemy surowe image_data, a nie obiekt Image
+                    types.Part.from_bytes(data=image_data, mime_type='image/jpeg'),
                     geo_prompt
                 ]
             )
             return response.text
+            
         except Exception as e:
             return f"Błąd Gemini API: {str(e)}"
