@@ -61,7 +61,7 @@ Aplikacja webowa służąca do znajdowania lokalizacji małego wycinka obrazu (n
     * Utwórz plik `.env` wewnątrz katalogu `backend`.
     * Dodaj swój klucz API Google oraz ścieżkę do folderu tymczasowego:
         ```env
-        GOOGLE_API_KEY=Twoj_Klucz_API_Tutaj
+        GOOGLE_API_KEY="Twoj_Klucz_API_Tutaj"
         ```
     * Upewnij się, że folder `backend/uploads` istnieje (jeśli nie, utwórz go).
 5.  Uruchom serwer deweloperski:
