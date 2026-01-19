@@ -8,14 +8,16 @@ class GeoAnalyzer:
         if api_key:
             self.client = genai.Client(api_key=api_key)
 
-    def analyze_image(self, image_path):
+    def analyze_image(self, image_bytes, mime_type='image/jpeg'):
+        """
+        Analizuje obraz przekazany jako bajty.
+        :param image_bytes: zawartość pliku obrazu w formacie bytes
+        :param mime_type: typ MIME obrazu (np. 'image/jpeg', 'image/png')
+        """
         if not self.client:
             return "Błąd: Brak klucza API Gemini."
 
         try:
-            with open(image_path, 'rb') as f:
-                image_bytes = f.read()
-
             geo_prompt = """
             Jesteś ekspertem od geolokalizacji i analizy obrazu (OSINT). 
             Twoim zadaniem jest przeanalizowanie zdjęcia i określenie jego lokalizacji.
@@ -43,10 +45,11 @@ class GeoAnalyzer:
                 model='gemini-2.5-flash',
                 config=types.GenerateContentConfig(temperature=0.4),
                 contents=[
-                    types.Part.from_bytes(data=image_bytes, mime_type='image/jpeg'),
+                    types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
                     geo_prompt
                 ]
             )
             return response.text
+            
         except Exception as e:
             return f"Błąd Gemini API: {str(e)}"

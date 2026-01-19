@@ -3,18 +3,22 @@ import numpy as np
 import base64
 
 class ImageMatcher:
-    def process(self, path_cutout, path_ref):
+    def process(self, cutout_bytes, ref_bytes):
         try:
-            cutout_color = cv2.imread(path_cutout)
-            ref_color = cv2.imread(path_ref)
+            nparr_cutout = np.frombuffer(cutout_bytes, np.uint8)
+            nparr_ref = np.frombuffer(ref_bytes, np.uint8)
+
+            cutout_color = cv2.imdecode(nparr_cutout, cv2.IMREAD_COLOR)
+            ref_color = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
+
 
             if ref_color is None or cutout_color is None:
-                return {"err": "Failed to load images"}
+                return {"err": "Failed to decode images from memory"}
 
             ref_gray = cv2.cvtColor(ref_color, cv2.COLOR_BGR2GRAY)
             cutout_gray = cv2.cvtColor(cutout_color, cv2.COLOR_BGR2GRAY)
 
-            # CLAHE
+            # CLAHE (Poprawa kontrastu - przydatne przy różnych oświetleniach)
             clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
             ref_gray = clahe.apply(ref_gray)
             cutout_gray = clahe.apply(cutout_gray)
@@ -25,9 +29,8 @@ class ImageMatcher:
             kp_cutout, des_cutout = sift.detectAndCompute(cutout_gray, None)
 
             if des_ref is None or des_cutout is None or len(kp_ref) == 0 or len(kp_cutout) == 0:
-                return {"err": "No key points detected"}
+                return {"matches": 0, "err": "No key points detected"}
 
-            # Matching
             matcher = cv2.BFMatcher(cv2.NORM_L2)
             knn_matches = matcher.knnMatch(des_cutout, des_ref, k=2)
 
@@ -45,17 +48,20 @@ class ImageMatcher:
                 dst_pts = np.float32([kp_ref[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
 
                 M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+                
                 if M is None:
-                    return {"err": "Failed to find homography"}
+                     return {"matches": len(good), "err": "Failed to find homography"}
                 
                 matches_mask = mask.ravel().tolist()
 
-                # Rysowanie ramki
                 h, w = cutout_gray.shape
                 pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
-                dst = cv2.perspectiveTransform(pts, M)
                 
-                ref_color_with_box = cv2.polylines(ref_color.copy(), [np.int32(dst)], True, (0, 255, 255), 3, cv2.LINE_AA)
+                try:
+                    dst = cv2.perspectiveTransform(pts, M)
+                    ref_color_with_box = cv2.polylines(ref_color.copy(), [np.int32(dst)], True, (0, 255, 255), 3, cv2.LINE_AA)
+                except Exception:
+                    ref_color_with_box = ref_color
 
                 draw_params = dict(matchColor=(0, 255, 0),
                                    singlePointColor=None,
@@ -72,11 +78,15 @@ class ImageMatcher:
 
                 return {
                     "success": True,
-                    "matches": len(good),
+                    "matches": len(good), # Zwracamy liczbę dopasowań
                     "result_base64": img_base64
                 }
             else:
-                return {"err": f"Insufficient matches: {len(good)}/{min_match_count}"}
+                return {
+                    "success": False, 
+                    "matches": len(good), 
+                    "err": f"Insufficient matches: {len(good)}/{min_match_count}"
+                }
 
         except cv2.error as err:
             return {"err": f"OpenCV error: {str(err)}"}
