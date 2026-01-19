@@ -30,13 +30,16 @@ function HomePage() {
     if (image1 == null || image2 == null) {
       setError("Files not found");
     } else {
-      if (image1.name === 22) {
+      if (
+        image1[0]?.name === image2[0]?.name &&
+        image1[0]?.size === image2[0]?.size
+      ) {
         console.log(image2);
         setError(
-          "Please select two different images (they must not be the same file)."
+          "Please select two different images (they must not be the same file).",
         );
       } else {
-        console.log(image1, image2);
+        console.log(image1[0].type, image2);
         setLoading(true);
         setError(null);
         setResult(null);

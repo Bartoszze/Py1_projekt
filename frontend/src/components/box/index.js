@@ -11,34 +11,55 @@ const BoxUpload = ({
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
+  const validateAndSend = (files) => {
+    const filesArray = Array.from(files);
+    const validImages = filesArray.filter((file) =>
+      file.type.startsWith("image/"),
+    );
+
+    if (validImages.length === 0 && filesArray.length > 0) {
+      alert("Only (PNG, JPG, GIF).");
+      return;
+    }
+
+    if (onFileSelect) {
+      onFileSelect(multiple ? validImages : [validImages[0]]);
+    }
+  };
+
   const handleBoxClick = () => {
     fileInputRef.current.click();
   };
+
   const handleFileChange = (event) => {
-    const file = event.target.files;
-    if (file && onFileSelect) {
-      const filesArray = Array.from(file);
-      onFileSelect(filesArray);
+    const files = event.target.files;
+    if (files.length > 0) {
+      validateAndSend(files);
     }
+    event.target.value = null;
   };
+
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
   };
+
   const handleDragLeave = (event) => {
     event.preventDefault();
     setIsDragging(false);
   };
+
   const handleDrop = (event) => {
-    event.preventDefault(); //bloka otwarcia pliku w nowej karcie
+    event.preventDefault();
     event.stopPropagation();
     setIsDragging(false);
-    const files = event.dataTransfer.files;
 
-    if (files && files.length > 0 && onFileSelect) {
-      onFileSelect(files);
+    const files = event.dataTransfer.files;
+    if (files && files.length > 0) {
+      validateAndSend(files);
     }
   };
+
   return (
     <div
       className={`home__upload ${status || isDragging ? "active" : ""}`}
@@ -66,7 +87,7 @@ const BoxUpload = ({
             <>
               <h4>Click to upload</h4>
               <p>or drag and drop</p>
-              <h5>PNG,JPG, GIF up to 100MB </h5>
+              <h5>PNG, JPG, GIF up to 100MB </h5>
             </>
           )}
         </div>
