@@ -52,4 +52,4 @@ class GeoAnalyzer:
             return response.text
             
         except Exception as e:
-            return f"Błąd Gemini API: {str(e)}"
+            return f"Błąd Gemini API: {str(e)}" 
